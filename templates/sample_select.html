@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>샘플로 체험해보기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      background-color: white;
+      color: #333;
+    }
+
+    h2 {
+      font-size: 24px;
+      font-weight: bold;
+      color: #4e812c;
+      margin: 40px 20px 20px;
+      line-height: 1.6;
+    }
+
+    .mascot {
+      width: 160px;
+      margin: 20px auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      justify-content: center;
+      padding: 20px 40px 60px;
+    }
+
+    .grid img {
+      width: 100%;
+      max-width: 140px;
+      height: 140px;
+      object-fit: cover;
+      cursor: pointer;
+      border-radius: 0;
+    }
+
+    .footer {
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+      line-height: 1.6;
+      padding-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h2>흑색종 여부를 알아보고 싶은<br>이미지를 클릭하세요!</h2>
+
+  <img src="{{ url_for('static', filename='images/mascot_glass2.png') }}" class="mascot" alt="마스코트">
+
+  <div class="grid">
+    {% for i in range(1, 7) %}
+      <img class="sample-img" src="{{ url_for('static', filename='samples/sample' ~ i ~ '.jpg') }}" data-path="samples/sample{{ i }}.jpg" alt="샘플{{ i }}">
+    {% endfor %}
+  </div>
+
+
+
+  <div class="footer">
+    ※ 본 앱은 의료 진단을 대신하지 않으며,<br>
+    정확한 진단은 전문 의료기관의 상담을 권장합니다.
+  </div>
+
+  <script>
+    document.querySelectorAll(".sample-img").forEach((img) => {
+      img.addEventListener("click", () => {
+        const imagePath = img.dataset.path;
+        const username = "{{ username }}";  // Jinja2에서 세션 전달된 값
+
+        const formData = new FormData();
+        formData.append("image_path", imagePath);
+        formData.append("username", username);
+
+        fetch("/sample-analyze", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.error) {
+              alert("오류 발생: " + data.error);
+              return;
+            }
+
+            localStorage.setItem("melanoma_result", JSON.stringify(data));
+            sessionStorage.setItem("melanoma_result", JSON.stringify(data));
+
+            if (data.final_class === "melanoma") {
+              window.location.href = "/melanoma_result";
+            } else {
+              window.location.href = "/benign_result";
+            }
+          })
+          .catch((err) => {
+            alert("분석 요청 실패: " + err);
+          });
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>AI 분석 결과 - 흑색종</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #88c77d;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      color: #000;
+    }
+    .container {
+      background-color: #fff;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 40px;
+      width: 80%;
+      max-width: 500px;
+    }
+    .lesion-image {
+      width: 100%;
+      max-width: 300px;
+      border: 2px solid #888;
+    }
+    .result-title {
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .info-button {
+      display: block;
+      margin: 8px auto 0;
+      font-size: 18px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .metric-list {
+      text-align: left;
+      margin: 10px 0 20px 0;
+      padding-left: 60px;
+      line-height: 1.8;
+    }
+    .highlight {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 20px 0 10px;
+    }
+    .red-text {
+      color: #d61919;
+      font-weight: bold;
+    }
+    .button-area {
+      margin-top: 30px;
+    }
+    .button-area button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      background-color: #4e914b;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .footer {
+      font-size: 12px;
+      margin-top: 30px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img class="lesion-image" id="result-image" src="" alt="병변 분석 이미지">
+
+    <!-- 제목 + 돋보기 버튼 -->
+    <div style="text-align: center;">
+      <div class="result-title">[AI 병변 분석 결과]</div>
+      <button id="infoBtn" class="info-button">🔍</button>
+    </div>
+
+    <div class="metric-list" id="feature-list"></div>
+    <div class="highlight" id="final-class"></div>
+    <div class="red-text" id="trust-risk"></div>
+
+    <img src="{{ url_for('static', filename='images/mascot_shock.png') }}" alt="마스코트" width="120" style="margin-top: 20px;">
+
+    <div class="button-area">
+      <button onclick="window.location.href='/main'">다시 촬영하기</button>
+      <button id="saveBtn">결과 저장하기</button>
+    </div>
+
+    <div class="footer">
+      본 분석 결과는 참고용입니다.<br>
+      정확한 진단을 위해 전문의의 상담을 권장합니다.
+    </div>
+  </div>
+
+  <!-- 🔍 팝업 박스 -->
+  <div id="popup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;">
+    <div style="background:white; width:280px; margin:100px auto; padding:20px; border-radius:12px; position:relative;">
+      <button onclick="document.getElementById('popup').style.display='none'" style="position:absolute; top:10px; right:15px; border:none; background:none; font-size:18px; cursor:pointer;">X</button>
+      <div style="font-weight:bold; margin-bottom:10px;">[AI 병변 분석 결과] <span style="color:red;">* 수치 *</span></div>
+      <div style="text-align:left; font-size:14px; line-height:1.6;">
+        - <b>비대칭성</b>: 완전 대칭이면 0,<br>1에 가까울수록 비대칭<br><br>
+        - <b>색상 다양성</b>: 수치가 클수록 다양한 색상 존재<br><br>
+        - <b>경계 불규칙성</b>: 1에 가까울수록 원형,<br>1보다 크면 찌그러짐<br><br>
+        - <b>크기</b>: 최소 악성 기준은 6mm,<br>대부분 정상은 이보다 작음
+      </div>
+    </div>
+  </div>
+
+  <!-- 결과 출력 스크립트 -->
+  <script>
+    const result = JSON.parse(sessionStorage.getItem("melanoma_result") || localStorage.getItem("melanoma_result"));
+
+    if (result) {
+      document.getElementById("result-image").src = "data:image/jpeg;base64," + result.boxed_image;
+
+      document.getElementById("feature-list").innerHTML = `
+        ・ 비대칭성: ${parseFloat(result.features.asymmetry).toFixed(4)}<br>
+        ・ 색상 다양성: ${parseFloat(result.features.color).toFixed(4)}<br>
+        ・ 경계 불규칙성: ${parseFloat(result.features.border).toFixed(4)}<br>
+        ・ 크기: 약 ${parseFloat(result.features.diameter).toFixed(4)} mm
+      `;
+
+      document.getElementById("final-class").innerHTML = `
+        ${result.username} 님의<br>AI 흑색종 판별 분석 결과<br>
+        <strong>‘흑색종’</strong>으로 판단됩니다.
+      `;
+
+      document.getElementById("trust-risk").innerHTML = `
+        신뢰도: ${result.trust}%<br>
+        위험도: ${result.risk}
+      `;
+    } else {
+      alert("결과를 불러올 수 없습니다. 메인 화면으로 돌아갑니다.");
+      window.location.href = "/main";
+    }
+
+    // 🔍 버튼 클릭 이벤트
+    document.getElementById("infoBtn").addEventListener("click", function () {
+      document.getElementById("popup").style.display = "block";
+    });
+  </script>
+
+  <!-- html2canvas 라이브러리 추가 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+  document.getElementById("saveBtn").addEventListener("click", function () {
+    const target = document.querySelector(".container");  // 캡처할 영역 지정
+
+    html2canvas(target).then(canvas => {
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = "melanoma_result.png";  // 파일명 원하는 대로 바꿔도 됨
+      link.click();
+    });
+  });
+</script>
+
+
+</body>
+</html>

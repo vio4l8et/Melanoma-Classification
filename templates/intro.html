@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>흑색종 소개</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #d8eac6;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      color: #333;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: normal;
+      margin: 25px 0 12px;
+      line-height: 1.6;
+    }
+
+    h2 b {
+      font-weight: bold;
+    }
+
+    .image-box {
+      background: white;
+      border-radius: 40px;
+      padding: 30px 20px 40px;
+      margin: 0 20px;
+    }
+
+    .melanoma-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 20px 0 10px;
+    }
+
+    .melanoma-img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .desc {
+      margin-top: 18px;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .desc b {
+      font-weight: bold;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 35px;
+      padding: 0 30px;
+    }
+
+    .nav-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 10px;
+      border: 1px solid #cfdcc3;
+      width: 110px;
+      cursor: pointer;
+    }
+
+    .nav-btn:first-child {
+      background-color: white;
+      color: #4e812c;
+    }
+
+    .nav-btn:last-child {
+      background-color: #d4e7c4;
+      color: #3b5b2a;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      max-width: 300px;
+      text-align: left;
+      z-index: 1000;
+    }
+
+    .popup button {
+      display: block;
+      margin: 15px auto 0;
+      padding: 6px 12px;
+      font-size: 14px;
+      background: #ccc;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>잠깐만요!<br><b>흑색종(Melanoma)</b>이 뭔지 알고 계신가요?</h2>
+
+  <div class="image-box">
+    <img src="{{ url_for('static', filename='images/melanoma.png') }}" class="melanoma-img" alt="흑색종 예시">
+    
+    <div class="desc">
+      흑색종은 피부 악성 신생물(암)을 말합니다.<br><br>
+      <b onclick="showPopup('melanin')">멜라닌</b> 세포에서 발생하며, 악성도가 높아 다른 암과<br>
+      비교해 전이 위험이 높고, 치료가 어려운 경우가 많습니다.<br><br>
+      악성 흑색종의 발생 원인은 확실히 밝혀지지 않았으나,<br><br>
+      <b onclick="showPopup('symptom')">일반적 증상</b>에 해당하는 의심되는 병변이 있다면<br>
+      전문의의 진단을 조기에 받는 것이 중요합니다.<br><br>
+      평소와 다른 점이나 색이 짙어진 점이 있다면<br>
+      확인이 필요해요!
+    </div>
+
+    <div class="btn-row">
+      <button class="nav-btn" onclick="location.href='/main'">Skip</button>
+      <button class="nav-btn" onclick="location.href='/start'">Next</button>
+    </div>
+  </div>
+
+  <!-- 팝업 -->
+  <div class="popup" id="popup-melanin">
+    <b>* 멜라닌</b><br>
+    동물의 조직에 있는 검은색이나 흑갈색의 색소
+    <button onclick="closePopup('popup-melanin')">닫기</button>
+  </div>
+
+  <div class="popup" id="popup-symptom">
+    <b>* 일반적 증상</b><br>
+    - 가장 악성도가 높은 흑색종의 경우 가려움증이나 통증 같은 자각 증상이 없으며<br>
+    평범한 검은 반점으로 보임<br><br>
+    - 새로 생긴 검은 반점<br><br>
+    - 이미 있었던 검은 점의 모양, 크기, 색조가 변하거나 작열감(화끈거림) 또는 통증이 생김<br><br>
+    - 출혈, 궤양, 가피(딱지) 형성 같은 표면상태의 변화<br><br>
+    - 위성병변(기존의 점과 인접하여 새로이 작은 점들이 생기는 경우)
+    <button onclick="closePopup('popup-symptom')">닫기</button>
+  </div>
+
+  <script>
+    function showPopup(id) {
+      document.getElementById('popup-' + id).style.display = 'block';
+    }
+    function closePopup(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Splash</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @font-face {
+      font-family: 'STCaiyun';
+      src: url("{{ url_for('static', filename='fonts/STCaiyun.ttf') }}");
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #7dc253;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    .mascot {
+      width: 200px;
+      height: 200px;
+      border-radius: 100%;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .mascot img {
+      width: 180px;
+    }
+
+    .logo-text {
+      font-family: 'STCaiyun', sans-serif;
+      font-size: 36px;
+      color: white;
+      margin-top: -5px;
+    }
+
+    .copyright {
+      position: absolute;
+      bottom: 30px;
+      font-size: 14px;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mascot">
+    <img src="{{ url_for('static', filename='images/mascot.png') }}" alt="마스코트">
+  </div>
+
+  <div class="logo-text">MelaScan</div>
+
+  <div class="copyright">© 同舟共濟</div>
+
+  <script>
+    setTimeout(function() {
+      window.location.href = "/intro";
+    }, 2000);
+  </script>
+
+</body>
+</html>
