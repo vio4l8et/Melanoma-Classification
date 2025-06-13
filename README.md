@@ -59,3 +59,6 @@
 - **주요 기능**:
   - 이미지 업로드 → AI 모델 추론 → 병변 특징 추출 → 결과 시각화
   - ABCD Rule 기반 병변 분석
+
+## 시연 영상
+▶ [Melascan.mp4](https://github.com/vio4l8et/Melanoma-Classification/blob/main/demo.mp4)
