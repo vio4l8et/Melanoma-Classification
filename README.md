@@ -61,4 +61,4 @@
   - ABCD Rule 기반 병변 분석
 
 ## 시연 영상
-▶ [Melascan.mp4](https://github.com/vio4l8et/Melanoma-Classification/blob/main/demo.mp4)
+▶ [Melascan.mp4](https://github.com/vio4l8et/Melanoma-Classification/blob/main/Melascan.mp4)
