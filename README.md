@@ -59,6 +59,17 @@
 - **주요 기능**:
   - 이미지 업로드 → AI 모델 추론 → 병변 특징 추출 → 결과 시각화
   - ABCD Rule 기반 병변 분석
+    - A(Asymmetry): 비대칭성
+    - B(Borders): 경계 불규칙성
+    - C(Color): 색상 다양성
+    - D(Diameter): 크기 
+
+- **기술 스택**:
+  - 개발 도구: Visual Studio Code (VS Code)
+  - 프론트엔드: HTML, CSS, JavaScript + Jinja2
+  - 백엔드: Flask, PyTorch + timm (ConvNeXt 기반)
+  - 클라이언트 기술: Fetch API, localStorage / sessionStorage
+  - 이미지 처리: OpenCV, PIL
 
 ## 시연 영상
 ▶ [Melascan.mp4](https://github.com/vio4l8et/Melanoma-Classification/blob/main/Melascan.mp4)
